@@ -22,3 +22,4 @@ export const authEndpoints = {
   getCurrentUser: () =>
     authApi.get('/user/'),
 }
+

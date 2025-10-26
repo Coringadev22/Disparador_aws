@@ -148,3 +148,4 @@ Veja `AUTHENTICATION.md` para documentação completa.
 ---
 
 **Desenvolvido com ❤️**
+

@@ -230,3 +230,4 @@ curl -X GET http://localhost:8000/api/campaigns/ \
 - [JWT Specification](https://tools.ietf.org/html/rfc7519)
 - [Django Authentication](https://docs.djangoproject.com/en/stable/topics/auth/)
 - [React Context API](https://react.dev/reference/react/useContext)
+
