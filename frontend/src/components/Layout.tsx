@@ -1,8 +1,16 @@
-import { Outlet, Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Mail, FileText, Users, List, History, Settings } from 'lucide-react'
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
+import { LayoutDashboard, Mail, FileText, Users, UserCog, List, History, Settings, LogOut, User } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function Layout() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { user, logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -11,6 +19,7 @@ export default function Layout() {
     { name: 'Contatos', href: '/contacts', icon: Users },
     { name: 'Listas', href: '/contact-lists', icon: List },
     { name: 'Histórico', href: '/logs', icon: History },
+    { name: 'Usuários', href: '/users', icon: UserCog },
     { name: 'Configurações', href: '/settings', icon: Settings },
   ]
 
@@ -46,6 +55,30 @@ export default function Layout() {
               )
             })}
           </nav>
+
+          {/* User section */}
+          <div className="border-t border-gray-800 p-4">
+            <div className="flex items-center gap-3 mb-3 px-2">
+              <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
+                <User className="h-5 w-5 text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-white truncate">
+                  {user?.username}
+                </p>
+                <p className="text-xs text-gray-400 truncate">
+                  {user?.email}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
+            >
+              <LogOut className="h-5 w-5" />
+              Sair
+            </button>
+          </div>
         </div>
       </div>
 

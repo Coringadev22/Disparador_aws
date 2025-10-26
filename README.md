@@ -50,36 +50,15 @@ Copie o arquivo `.env.example` para `.env`:
 cp .env.example .env
 ```
 
-Edite o arquivo `.env` com suas credenciais:
+Edite o arquivo `.env` com suas credenciais AWS SES. O arquivo `.env.example` contém todas as variáveis necessárias com explicações detalhadas.
 
-```env
-# Django
-SECRET_KEY=your-secret-key-here-change-in-production
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
+**Variáveis principais a configurar:**
+- `AWS_ACCESS_KEY_ID` - Sua chave de acesso AWS
+- `AWS_SECRET_ACCESS_KEY` - Sua chave secreta AWS  
+- `DEFAULT_ADMIN_PASSWORD` - Senha forte para o admin (mínimo 8 caracteres)
+- `SECRET_KEY` - Chave secreta do Django (gere uma nova em produção)
 
-# Database
-DATABASE_URL=postgresql://emailuser:emailpass123@db:5432/emailplatform
-
-# Redis
-REDIS_URL=redis://redis:6379/0
-
-# Celery
-CELERY_BROKER_URL=redis://redis:6379/0
-CELERY_RESULT_BACKEND=redis://redis:6379/0
-
-# AWS SES (PREENCHA COM SUAS CREDENCIAIS)
-AWS_ACCESS_KEY_ID=your-aws-access-key-id
-AWS_SECRET_ACCESS_KEY=your-aws-secret-access-key
-AWS_SES_REGION=us-east-1
-AWS_SES_CONFIGURATION_SET=your-configuration-set-name
-
-# SES Rate Limiting
-SES_RATE_LIMIT_PER_SECOND=14
-
-# Frontend
-VITE_API_URL=http://localhost:8000
-```
+Veja o arquivo `.env.example` para todas as configurações disponíveis.
 
 ## 🔧 Configuração AWS SES
 

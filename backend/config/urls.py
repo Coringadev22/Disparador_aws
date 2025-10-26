@@ -7,6 +7,7 @@ from apps.core.views.webhooks import ses_webhook
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/auth/', include('apps.authentication.urls')),
     path('api/', include('apps.campaigns.urls')),
     path('api/', include('apps.emails.urls')),
     path('api/', include('apps.contacts.urls')),
