@@ -60,16 +60,25 @@ export default function TemplateEditor() {
     }
   }, [template])
 
-  // Load design into editor when ready
+  // Load design into editor when ready or when returning to visual tab
   useEffect(() => {
-    if (editorReady && designJson && emailEditorRef.current) {
+    console.log('[useEffect] Design load effect triggered', {
+      activeTab,
+      editorReady,
+      hasDesignJson: !!designJson,
+      hasEditorRef: !!emailEditorRef.current
+    })
+
+    if (activeTab === 'visual' && editorReady && designJson && emailEditorRef.current) {
+      console.log('[useEffect] Loading design into editor...')
       try {
         emailEditorRef.current.editor?.loadDesign(designJson)
+        console.log('[useEffect] Design loaded successfully')
       } catch (error) {
-        console.error('Error loading design:', error)
+        console.error('[useEffect] Error loading design:', error)
       }
     }
-  }, [editorReady, designJson])
+  }, [editorReady, designJson, activeTab])
 
   const onEditorReady = () => {
     setEditorReady(true)
@@ -237,24 +246,30 @@ export default function TemplateEditor() {
   }
 
   const handleTabChange = (tab: TabType) => {
-    // Export current design before switching tabs
+    console.log('[TabChange] Switching from', activeTab, 'to', tab)
+
+    // Export current design before switching away from visual tab
     if (activeTab === 'visual' && emailEditorRef.current && editorReady) {
+      console.log('[TabChange] Exporting design from visual editor...')
       try {
         emailEditorRef.current.editor?.exportHtml((data) => {
           const { design, html } = data
+          console.log('[TabChange] Design exported successfully, design object:', design ? 'present' : 'null')
           setDesignJson(design)
           const convertedHtml = html.replace(/\{\{(\w+)\}\}/g, (_, varName) => `$${varName}`)
           setHtmlContent(convertedHtml)
           // Switch tab after export is complete
           setActiveTab(tab)
+          console.log('[TabChange] Tab switched to', tab)
         })
       } catch (error) {
-        console.error('Error exporting HTML:', error)
+        console.error('[TabChange] Error exporting HTML:', error)
         // Switch tab anyway if export fails
         setActiveTab(tab)
       }
     } else {
-      // If not coming from visual tab, switch immediately
+      // Just switch tab - useEffect will handle loading design into visual editor
+      console.log('[TabChange] Switching tab (useEffect will handle design reload if needed)')
       setActiveTab(tab)
     }
   }
@@ -438,20 +453,18 @@ export default function TemplateEditor() {
         </div>
 
         <div className="p-0">
-          {/* Visual Tab */}
-          {activeTab === 'visual' && (
-            <div style={{ height: '600px' }}>
-              <EmailEditor
-                ref={emailEditorRef}
-                onReady={onEditorReady}
-                minHeight="600px"
-                options={{
-                  displayMode: 'email',
-                  locale: 'pt-BR',
-                }}
-              />
-            </div>
-          )}
+          {/* Visual Tab - Keep mounted but hide when not active */}
+          <div style={{ height: '600px', display: activeTab === 'visual' ? 'block' : 'none' }}>
+            <EmailEditor
+              ref={emailEditorRef}
+              onReady={onEditorReady}
+              minHeight="600px"
+              options={{
+                displayMode: 'email',
+                locale: 'pt-BR',
+              }}
+            />
+          </div>
 
           {/* HTML Tab */}
           {activeTab === 'html' && (
